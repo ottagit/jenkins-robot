@@ -5,15 +5,23 @@ Resource    ../Data/data.robot
 *** Keywords ***
 
 Begin Web Test
-    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
-    Call Method    ${options}   add_argument    headless
-    Call Method    ${options}   add_argument    --disable-popup-blocking
-    Call Method    ${options}   add_argument    --ignore-certificate-errors
-    Open Browser    about:blank    ${BROWSER}    options=${options}
-    # IgnoreCertificateErrors
-#    ${chrome_options}    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
-#    Call Method    ${chrome_options}    add_argument    --ignore-certificate-errors
-#    Create Webdriver    Chrome    chrome    chrome_options=${chrome_options}
+    Begin Web Test
+    ${chrome_options} =     Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+    Call Method    ${chrome_options}   add_argument    headless
+    Call Method    ${chrome_options}   add_argument    disable-gpu
+    ${options}=     Call Method     ${chrome_options}    to_capabilities
+
+    Create Webdriver    desired_capabilities=${options}
+
+Headless Chrome - Open Browser
+    ${chrome_options} =     Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+    Call Method    ${chrome_options}   add_argument    headless
+    Call Method    ${chrome_options}   add_argument    disable-gpu
+    ${options}=     Call Method     ${chrome_options}    to_capabilities
+
+    Open Browser    http://cnn.com    browser=chrome    remote_url=http://localhost:4444/wd/hub     desired_capabilities=${options}
+
+    Maximize Browser Window
 
 End Web Test
     Close Browser
