@@ -6,6 +6,7 @@ Resource    ../Data/data.robot
 
 Begin Web Test
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
+    Call Method    ${options}   add_argument    headless
     Call Method    ${options}   add_argument    --disable-popup-blocking
     Call Method    ${options}   add_argument    --ignore-certificate-errors
     Open Browser    about:blank    ${BROWSER}    options=${options}
