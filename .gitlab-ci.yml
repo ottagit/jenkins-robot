@@ -1,0 +1,13 @@
+stages:
+  - test
+
+image: ppandiyan/robotframework
+
+run-tests:
+  stage: test
+  script:
+    - robot --outputdir Results .
+  artifacts:
+    paths:
+      - Results
+    expire_in: 1 day
